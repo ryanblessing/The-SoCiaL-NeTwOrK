@@ -34,6 +34,11 @@ const ReactionSchema = new Schema(
 
 const ThoughtSchema = new Schema(
     {
+        //maybe need to make a thought id to make work?
+        // thoughtId: {
+        //     type: Schema.Types.ObjectId,
+        //     default: () => new Types.ObjectId()
+        // },
         thoughtText: {
             type: String,
             required:'Please insert your thoughts!',

@@ -12,16 +12,6 @@ getAllUsers(req, res) {
     .catch(err => {
         res.json(err);
     });
-    // .populate({
-    //     path: 'Thoughts',
-    //     select: '-__v'
-    // })
-    // .select('-__v')
-    // .then(dbUserData => res.json(dbUserData))
-    // .catch(err => {
-    //     console.log('error in user-controller find all method', err)
-    //     res.status(404);
-    // })
 },
 
 // 2.get single user by its _id and populate thought and friend data
