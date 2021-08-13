@@ -4,17 +4,24 @@ const { User } = require('../model')
 const userController = {
 // 1.get all users
 getAllUsers(req, res) {
-    User.find()
-    .populate({
-        path: 'Thoughts',
-        select: '-__v'
+    User.find({})
+    .then(dbUserData => {
+        console.log(dbUserData)
+        res.json(dbUserData);
     })
-    .select('-__v')
-    .then(dbUserData => res.json(dbUserData))
     .catch(err => {
-        console.log('error in user-controller find all method', err)
-        res.status(404);
-    })
+        res.json(err);
+    });
+    // .populate({
+    //     path: 'Thoughts',
+    //     select: '-__v'
+    // })
+    // .select('-__v')
+    // .then(dbUserData => res.json(dbUserData))
+    // .catch(err => {
+    //     console.log('error in user-controller find all method', err)
+    //     res.status(404);
+    // })
 },
 
 // 2.get single user by its _id and populate thought and friend data
@@ -38,19 +45,31 @@ getUserById({ params }, res) {
 createUser({ body }, res) {
     User.create(body)
     .then(dbUserData => res.json(dbUserData))
-    .catch(err => res.json('create user error', err))
-}
+    .catch(err => res.status(err).json('create user error!'))
+},
 
 //PUT ROUTES
 
 // 1. PUT to update a user by its _ID
-
+UpdateUser({ params, body }, res) {
+    User.findByIdAndUpdate({ _id: params.id }, body, { new: true })
+    .then(dbUserData => {
+        if(!dbUserData) {
+            res.status(404).json({ message: 'No user found with this Id!'})
+            return;
+        }
+        res.json(dbUserData);
+    })
+    .catch(err => res.json(err).json('update route in user-controller error!'))
+},
 // DELETE ROUTES
-
 // 1. Remove user by its _Id
-
-};
-
+deleteUser({ params }, res) {
+    User.findOneAndDelete({ _id: params.id })
+    .then(dbUserData => res.json(dbUserData))
+    .catch(err => res.status(err).json('Delete user error!'))
+}
+}
 
 //---- /api/users/:userID/friends/:friendID
 
