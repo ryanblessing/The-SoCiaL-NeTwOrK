@@ -17,7 +17,7 @@ getAllThought(req, res) {
 getThoughtById({}) {
     Thought.findOne({ _id: params.id })
     .populate({
-        path: 'User',
+        path: 'Thought',
         select: '-__v'
     })
     .select('-__v')
@@ -30,7 +30,7 @@ getThoughtById({}) {
 
 //POST
 
-// 1. POST to create a new thought(dont forget to push the created thoughts _id to the associated users thoughts array field)
+// 1. POST to create a new thought(don't forget to push the created thoughts _id to the associated users thoughts array field)
 createThought({ params, body }, res) {
     console.log(body);
     Thought.create(body)
@@ -50,24 +50,26 @@ createThought({ params, body }, res) {
 //PUT
 // 1. PUT to update a thought by its _id
 updateThought({ params, body }, res) {
-    Thought.findByIdAndUpdate({ _id: params.id }, body, {new: true })
+    Thought.findOneAndUpdate({ _id: params.id }, body, {new: true })
     .then(dbThoughtData => {
-        if(!dbThoughtData) {
-            res.status(404).json({ message: 'No Thought with this id! '})
-            return;
-        }
         res.json(dbThoughtData);
     })
     .catch(err => res.status(err).json('update user error'))
 },
 //DELETE
 // 1.DELETE to remove a thought by its _id
+
+
+///issues with delete thought, need to come back and figure out what object, object function is
 deleteThought({ params }, res) {
-    Thought.findOneAndDelete({ _id: params.id })
+    Thought.findOneAndUpdate(
+        { _id: params.thoughtId },
+        { $pull: { thought: { thoughtId: params.thoughtId } } },
+        {new: true }
+    )
     .then(dbThoughtData => res.json(dbThoughtData))
-    .catch(err => res.status(err).json('Delete thought issues'))
-}
-}
+    .catch(err => res.json('Your error is reaching this catch in delete thought controller',err))
+},
 
 // example data
 // {
@@ -79,8 +81,28 @@ deleteThought({ params }, res) {
 // --- /api/thoughts/:thoughtID/reactions
 
 // 1.POST to create a reaction stored in a single thoughts reactions array field
-
+addReaction({ body }, res ) {
+    Thought.create(
+        { _id: params.thoughtId },
+        { $push: {
+            reactions: params.reactionId
+        }
+    }, {
+        new: true
+    })
+    .then(dbThoughtData => res.json(dbThoughtData))
+    .catch(err => res.json('reaction add error in thought controller', err))
+},
 // 2. DELETE to pull and remove a reaction by the reactions reactionID value
 
+deleteReaction({ params }, res ) {
+    Thought.findOneAndDelete(
+        { _id: params.reactionId },
+        { $pull: { reactions: { reactionId: params.reactionId } } }
+        )
+        .then(dbThoughtData => res.json(dbThoughtData))
+        .catch(err => res.json('error in delete reaction area', err))
+}
+}
 
 module.exports = thoughtController;
