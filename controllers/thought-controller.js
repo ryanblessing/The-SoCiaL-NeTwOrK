@@ -38,7 +38,10 @@ const thoughtController = {
     //POST
 
     // 1. POST to create a new thought(don't forget to push the created thoughts _id to the associated users thoughts array field)
-    createThought({params,body}, res) {
+    createThought({
+        params,
+        body
+    }, res) {
         console.log(body);
         Thought.create(body)
             .then(({
@@ -86,7 +89,11 @@ const thoughtController = {
     // 1.DELETE to remove a thought by its _id
     ///issues with delete thought, need to come back and figure out what object, object function is
 
-    deleteThought({ params }, res) {
+
+    //get help with delete thought with TA's
+    deleteThought({
+        params
+    }, res) {
         Thought.findByIdAndDelete(params.thoughtId)
             .then(dbThoughtData => {
                 if (!dbThoughtData) {
@@ -106,8 +113,10 @@ const thoughtController = {
                 )
             })
             .then(dbUserData => {
-                if(!dbUserData) {
-                    res.status(404).json({ message: 'No user found with this ID' })
+                if (!dbUserData) {
+                    res.status(404).json({
+                        message: 'No user found with this ID'
+                    })
                     return;
                 }
                 res.json(dbUserData)
@@ -125,17 +134,25 @@ const thoughtController = {
     // --- /api/thoughts/:thoughtID/reactions
 
     // 1.POST to create a reaction stored in a single thoughts reactions array field
+
+    // get help in all reactions with TA's
     addReaction({
-        params
+        params,
+        body
     }, res) {
-        Thought.create({
-                _id: params.thoughtId
-            }, {
-                $push: {
-                    reactions: params.reactionId
-                }
-            }, {
-                new: true
+        Thought.create(body)
+            .then(({
+                _id
+            }) => {
+                return Thought.findOneAndUpdate( params.reactionId , {
+                    _id: params.thoughtId
+                }, {
+                    $push: {
+                        reaction: _id
+                    }
+                }, {
+                    new: true
+                })
             })
             .then(dbThoughtData => res.json(dbThoughtData))
             .catch(err => res.status(err).json('reaction add error in thought controller'))
