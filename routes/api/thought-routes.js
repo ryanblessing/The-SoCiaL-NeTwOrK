@@ -19,24 +19,25 @@ router
 router
     .route('/:userId')
     .post(createThought)
-
+    
 // -- api/thoughts/:id
 router
     .route('/:id')
-    .get(getThoughtById)
-    .put(updateThought)
-
+    // .put(updateThought)
+    
 // -- api/thoughts/userId/thoughtId
 router
-    .route('/:userId/:thoughtId')
+    .route('/:userId/:id')
+    .get(getThoughtById)
     .delete(deleteThought)
-    
+    .put(updateThought)
+
 // -- api/thoughts/:thoughtId/reactions
 router 
     .route('/:id/reactions')
     .post(addReaction)
     .delete(deleteReaction) 
 
-
+//user id - 6116d5508adc7b10f8279d21 -batman
 
     module.exports = router;

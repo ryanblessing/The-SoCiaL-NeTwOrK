@@ -22,3 +22,15 @@ router
 
 
 module.exports = router;
+
+// {
+// 	"email": "test@gmail.com",
+// 	"username": "ryanBtest12"
+// }
+
+
+// {
+// 	"thoughtText": "work please",
+// 	"username": "ryanBtest12",
+// 	"_id": "611e774b446c8d2e584b80c6"
+// }

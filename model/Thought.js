@@ -54,7 +54,6 @@ const ThoughtSchema = new Schema(
         },
         username: {
             type: String,
-            //find out if this needs to be a Schema.Types.something in reference to the userSchema.
             required: 'Username is required!',
             trim: true
         },

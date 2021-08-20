@@ -18,7 +18,7 @@ const thoughtController = {
     },
     // 2. GET to get a single thought by its _id
     getThoughtById({ params }, res) {
-        Thought.findById( params.id )
+        Thought.findById({ _id: params.id })
             .then(dbThoughtData => {
                 if(!dbThoughtData) {
                     res.status(404).json({ message: 'No thought found with this id!' })
@@ -83,12 +83,12 @@ const thoughtController = {
     },
     //DELETE
     // 1.DELETE to remove a thought by its _id
-    ///issues with delete thought, need to come back and figure out what object, object function is
+
 
 
     //get help with delete thought with TA's
     deleteThought({ params }, res) { 
-        Thought.findByIdAndDelete(params.thoughtId)
+        Thought.findByIdAndDelete(params.id)
             .then(dbThoughtData => {
                 if (!dbThoughtData) {
                     res.status(404).json({
