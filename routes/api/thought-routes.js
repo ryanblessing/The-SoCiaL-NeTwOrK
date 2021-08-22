@@ -19,12 +19,7 @@ router
 router
     .route('/:userId')
     .post(createThought)
-    
-// -- api/thoughts/:id
-router
-    .route('/:id')
-    // .put(updateThought)
-    
+        
 // -- api/thoughts/userId/thoughtId
 router
     .route('/:userId/:id')
@@ -34,10 +29,10 @@ router
 
 // -- api/thoughts/:thoughtId/reactions
 router 
-    .route('/:id/reactions')
+    .route('/:userId/:id/reactions')
     .post(addReaction)
     .delete(deleteReaction) 
-
-//user id - 6116d5508adc7b10f8279d21 -batman
+    
+//user id - 61227b4798f9623da0c93f30 -bane
 
     module.exports = router;
